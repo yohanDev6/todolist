@@ -1,9 +1,13 @@
 package com.yohandevmeia.todolist.todolist.models.task;
 
+import com.yohandevmeia.todolist.todolist.models.user.User;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -14,14 +18,22 @@ public class Task {
     private long id;
     private String title, description;
     private Priorities priority;
-    private boolean finished;
+    private boolean finished = false;
 
-    public Task(long id, String title, String description, Priorities priority, boolean finished){
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.priority = priority;
-        this.finished = finished;
+    @ManyToOne
+    @JoinColumn(name = "user", nullable = false)
+    private User user;
+
+    public Task(long id, String title, String description, Priorities priority) {
+        if (id <= 0 || title == null || title.trim().isEmpty() || description == null || description.trim().isEmpty()
+                || priority == null) {
+            throw new IllegalArgumentException("Invalid data");
+        } else {
+            this.id = id;
+            this.title = title;
+            this.description = description;
+            this.priority = priority;
+        }
     }
 
     public long getId() {
@@ -31,28 +43,44 @@ public class Task {
     public String getTitle() {
         return title;
     }
+
     public void setTitle(String title) {
-        this.title = title;
+        if (title.trim().isEmpty()) {
+            throw new IllegalArgumentException("Title can not be null");
+        } else {
+            this.title = title;
+        }
     }
 
     public String getDescription() {
         return description;
     }
+
     public void setDescription(String description) {
-        this.description = description;
+        if (description.trim().isEmpty()) {
+            throw new IllegalArgumentException("Description can not be null");
+        } else {
+            this.description = description;
+        }
     }
 
     public Priorities getPriority() {
         return priority;
     }
+
     public void setPriority(Priorities priority) {
-        this.priority = priority;
+        if (priority == null) {
+            throw new IllegalArgumentException("Priority can not be null");
+        } else {
+            this.priority = priority;
+        }
     }
 
-    public boolean getFinished(){
+    public boolean getFinished() {
         return finished;
     }
-    public void setFinished(boolean finished){
+
+    public void setFinished(boolean finished) {
         this.finished = finished;
     }
 }
