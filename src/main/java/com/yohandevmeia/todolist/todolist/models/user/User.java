@@ -37,6 +37,14 @@ public class User {
         }
     }
 
+    public User(UserDTO userDTO) {
+        if (!userDTO.name().trim().isEmpty() && id > 0) {
+           this.name = userDTO.name();
+        } else {
+            throw new IllegalArgumentException("Invalid name or id");
+        }
+    }
+    
     public long getId() {
         return id;
     }
