@@ -1,17 +1,16 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Record.java to edit this template
- */
 package com.yohandevmeia.todolist.todolist.models.user;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author Yohan
- */
-public record UserDTO(long id, String name) {
+import jakarta.validation.constraints.NotBlank;
+
+
+public record UserDTO(
+		long id, 
+		
+		@NotBlank(message = "Name can not be null")
+		String name) {
 
     public UserDTO(User user){
         this(user.getId(), user.getName());

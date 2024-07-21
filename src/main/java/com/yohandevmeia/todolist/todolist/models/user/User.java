@@ -28,21 +28,12 @@ public class User {
 
     }
 
-    public User(long id, String name) {
-        if (id > 0 && !name.trim().isEmpty()) {
-            this.id = id;
-            this.name = name;
-        } else {
-            throw new IllegalArgumentException("Invalid name or id");
-        }
+    public User(String name) {
+        this.name = name;
     }
 
     public User(UserDTO userDTO) {
-        if (!userDTO.name().trim().isEmpty() && id > 0) {
-           this.name = userDTO.name();
-        } else {
-            throw new IllegalArgumentException("Invalid name or id");
-        }
+        name = userDTO.name();
     }
     
     public long getId() {

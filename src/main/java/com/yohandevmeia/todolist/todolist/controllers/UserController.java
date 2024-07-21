@@ -4,10 +4,16 @@ import com.yohandevmeia.todolist.todolist.models.user.User;
 import com.yohandevmeia.todolist.todolist.models.user.UserDTO;
 import com.yohandevmeia.todolist.todolist.models.user.UserRepository;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
+
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,8 +32,14 @@ public class UserController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<String> create(@RequestBody UserDTO userDTO) {
-        try {
+    public ResponseEntity<?> create(@Valid @RequestBody UserDTO userDTO, BindingResult bindingResult) {
+    	if (bindingResult.hasErrors()) {
+			List<String> errorMessages = bindingResult.getFieldErrors().stream()
+                    .map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
+                    .collect(Collectors.toList());
+			return new ResponseEntity<>(errorMessages, HttpStatus.BAD_REQUEST);
+		}
+    	try {
             User user = new User(userDTO);
             userRepository.save(user);
             return new ResponseEntity<>("User created successfully", HttpStatus.CREATED);
@@ -61,8 +73,14 @@ public class UserController {
 
     @PutMapping
     @Transactional
-    public ResponseEntity<String> update(@RequestBody UserDTO userDTO) {
-        try {
+    public ResponseEntity<?> update(@Valid @RequestBody UserDTO userDTO, BindingResult bindingResult) {
+    	if (bindingResult.hasErrors()) {
+			List<String> errorMessages = bindingResult.getFieldErrors().stream()
+                    .map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
+                    .collect(Collectors.toList());
+			return new ResponseEntity<>(errorMessages, HttpStatus.BAD_REQUEST);
+		}
+    	try {
             User user = new User(userDTO);
             userRepository.save(user);
             return new ResponseEntity<>("User updated successfully", HttpStatus.OK);
@@ -74,13 +92,12 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    @Transactional
     public ResponseEntity<String> delete(@PathVariable long id) {
         try {
             userRepository.deleteById(id);
             return new ResponseEntity<>("User deleted successfully", HttpStatus.OK);
         } catch (IllegalArgumentException iae) {
-            return new ResponseEntity<>("Invalid data: " + iae.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Id must be > 0", HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             return new ResponseEntity<>("An unexpected error ocurred: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }

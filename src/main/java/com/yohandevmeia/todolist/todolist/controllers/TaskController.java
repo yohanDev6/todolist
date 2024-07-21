@@ -22,6 +22,7 @@ import com.yohandevmeia.todolist.todolist.models.task.TaskDTO;
 import com.yohandevmeia.todolist.todolist.models.task.TaskRepository;
 import com.yohandevmeia.todolist.todolist.models.user.UserRepository;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
 @RestController
@@ -35,6 +36,7 @@ public class TaskController {
 	private UserRepository userRepository;
 	
 	@PostMapping
+	@Transactional
 	public ResponseEntity<?> create(@Valid @RequestBody TaskDTO taskDTO, BindingResult bindingResult){
 		if (bindingResult.hasErrors()) {
 			List<String> errorMessages = bindingResult.getFieldErrors().stream()
@@ -81,6 +83,7 @@ public class TaskController {
 	}
 	
 	@PutMapping
+	@Transactional
 	public ResponseEntity<?> update(@Valid @RequestBody TaskDTO taskDTO, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			List<String> errorMessages = bindingResult.getFieldErrors().stream()
