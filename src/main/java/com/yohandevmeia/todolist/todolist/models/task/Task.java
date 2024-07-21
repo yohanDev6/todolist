@@ -17,22 +17,25 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String title, description;
-    private Priorities priority;
+    private String priority;
     private boolean finished = false;
 
     @ManyToOne
-    @JoinColumn(name = "user", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public Task(long id, String title, String description, Priorities priority) {
-        if (id <= 0 || title == null || title.trim().isEmpty() || description == null || description.trim().isEmpty()
+    public Task(){
+
+    }
+    
+    public Task(String title, String description, Priorities priority) {
+        if (title == null || title.trim().isEmpty() || description == null || description.trim().isEmpty()
                 || priority == null) {
             throw new IllegalArgumentException("Invalid data");
         } else {
-            this.id = id;
             this.title = title;
             this.description = description;
-            this.priority = priority;
+            this.priority = simpleEnumPriority(priority);
         }
     }
 
@@ -64,7 +67,7 @@ public class Task {
         }
     }
 
-    public Priorities getPriority() {
+    public String getPriority() {
         return priority;
     }
 
@@ -72,7 +75,7 @@ public class Task {
         if (priority == null) {
             throw new IllegalArgumentException("Priority can not be null");
         } else {
-            this.priority = priority;
+            this.priority = simpleEnumPriority(priority);
         }
     }
 
@@ -82,5 +85,31 @@ public class Task {
 
     public void setFinished(boolean finished) {
         this.finished = finished;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    //Convert from enum to string
+    private String simpleEnumPriority(Priorities priority) {
+        switch (priority) {
+            case BAIXA:
+                return "b";
+            case MODERADA_BAIXA:
+                return "mb";
+            case MODERADA:
+                return "m";
+            case MODERADA_ALTA:
+                return "ma";
+            case ALTA:
+                return "a";
+            default:
+                return "b";
+        }
     }
 }
