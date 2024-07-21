@@ -4,7 +4,6 @@ import com.yohandevmeia.todolist.todolist.models.user.User;
 import com.yohandevmeia.todolist.todolist.models.user.UserDTO;
 import com.yohandevmeia.todolist.todolist.models.user.UserRepository;
 import jakarta.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
