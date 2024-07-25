@@ -1,4 +1,4 @@
-package com.yohandevmeia.todolist.todolist.controllers;
+package com.yohandevmeia.todolist.todolist.controllers.restcontrollers;
 
 import com.yohandevmeia.todolist.todolist.models.user.User;
 import com.yohandevmeia.todolist.todolist.models.user.UserDTO;
